@@ -1,9 +1,8 @@
 // 现在实现你自己的玩家类
 // 这个类需要一个 update() 函数， render() 函数和一个 handleInput()函数
 var Player = function () {
-  
-    this.gridX = Math.random(0, GRID_ROW);
-    this.girdY = Math.random(0, GRID_COL);
+    this.gridX = Math.floor(Math.random() * GRID_ROW);
+    this.gridY = 5;
     
     this.x = 0;
     this.y = 0;
