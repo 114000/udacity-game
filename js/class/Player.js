@@ -13,8 +13,8 @@ var Player = function () {
 }
 
 Player.prototype.update = function () {
-    this.x = this.gridX * GRIRD_WIDTH;
-    this.y = this.gridY * GRID_HEIGHT - 20;
+    this.x = this.gridX * GRID_WIDTH;
+    this.y = this.gridY * GRID_HEIGHT - OBJECT_DISPLAY_OFFSET_Y;
 }
 
 Player.prototype.render = function () {

@@ -5,9 +5,17 @@ var allEnemies = [];
 var allObstacles = [];
 var player = new Player();
 
-function generateEnemy () {
-    
+function getRandomSpaceTime () {
+    return (Math.random() * (3 - 1) + 1) * 1000
 }
+
+function generateEnemy () {
+    allEnemies.push(new Enemy());
+    setTimeout(generateEnemy, getRandomSpaceTime());
+}
+
+setTimeout(generateEnemy, getRandomSpaceTime());
+
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
 // 方法里面。你不需要再更改这段代码了。
 document.addEventListener('keyup', function(e) {

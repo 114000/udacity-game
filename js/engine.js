@@ -66,7 +66,7 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
 
-        
+        checkCollisions();
     }
 
     /* function :
@@ -78,12 +78,12 @@ var Engine = (function(global) {
         var colled = false;
         for (var i = 0; i < allEnemies.length; i++) {
             var enemy = allEnemies[i];
-            colled = Math.abs(enemy.x - player.x) < 10 || Math.abs(enemy.y - player.y < 30);
+            // console.log(player.gridY, enemy.gridY);
+            colled = Math.abs(enemy.x - player.x) < GRID_WIDTH / 2 && player.gridY == enemy.gridY;
             if (colled) break;
         }
         
         if (!colled) return
-
         player.gridX = -1;
         player.girdY = -1;
         player.update();
@@ -95,9 +95,16 @@ var Engine = (function(global) {
      * 这些更新函数应该只聚焦于更新和对象相关的数据/属性。把重绘的工作交给 render 函数。
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
+        for (var i = 0; i < allEnemies.length; i++) {
+            var enemy = allEnemies[i];
+            if (enemy.x > GRID_WIDTH * 5) {
+                allEnemies.splice(i , 1);
+                i--
+                continue;
+            }
+
             enemy.update(dt);
-        });
+        }
         
         player.update();
     }
