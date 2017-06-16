@@ -65,7 +65,29 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+
+        
+    }
+
+    /* function :
+     * 这个函数会遍历 allEnemies 数组中的敌人，使其与人物进行碰撞检测 
+     * 如果
+    */
+
+    function checkCollisions () {
+        var colled = false;
+        for (var i = 0; i < allEnemies.length; i++) {
+            var enemy = allEnemies[i];
+            colled = Math.abs(enemy.x - player.x) < 10 || Math.abs(enemy.y - player.y < 30);
+            if (colled) break;
+        }
+        
+        if (!colled) return
+
+        player.gridX = -1;
+        player.girdY = -1;
+        player.update();
+        player = new Player();
     }
 
     /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
@@ -76,6 +98,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+        
         player.update();
     }
 
