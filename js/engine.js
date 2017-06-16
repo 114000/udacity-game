@@ -65,29 +65,8 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-
-        checkCollisions();
-    }
-
-    /* function :
-     * 这个函数会遍历 allEnemies 数组中的敌人，使其与人物进行碰撞检测 
-     * 如果
-    */
-
-    function checkCollisions () {
-        var colled = false;
-        for (var i = 0; i < allEnemies.length; i++) {
-            var enemy = allEnemies[i];
-            // console.log(player.gridY, enemy.gridY);
-            colled = Math.abs(enemy.x - player.x) < GRID_WIDTH / 2 && player.gridY == enemy.gridY;
-            if (colled) break;
-        }
-        
-        if (!colled) return
-        player.gridX = -1;
-        player.girdY = -1;
-        player.update();
-        player = new Player();
+        gameCheck();
+        updateUI();
     }
 
     /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
@@ -107,6 +86,11 @@ var Engine = (function(global) {
         }
         
         player.update();
+
+    }
+
+    function updateUI () {
+        updateScore();
     }
 
     /* 这个函数做了一些游戏的初始渲染，然后调用 renderEntities 函数。记住，这个函数
@@ -170,7 +154,11 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
     ]);
     Resources.onReady(init);
 
