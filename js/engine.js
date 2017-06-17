@@ -66,7 +66,6 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         gameCheck();
-        updateUI();
     }
 
     /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
@@ -74,11 +73,13 @@ var Engine = (function(global) {
      * 这些更新函数应该只聚焦于更新和对象相关的数据/属性。把重绘的工作交给 render 函数。
      */
     function updateEntities(dt) {
+        /**
+         * 先将移动到屏幕外的敌人删除掉，提高性能
+         */
         for (var i = 0; i < allEnemies.length; i++) {
             var enemy = allEnemies[i];
             if (enemy.x > GRID_WIDTH * 5) {
-                allEnemies.splice(i , 1);
-                i--
+                allEnemies.splice(i-- , 1);
                 continue;
             }
 
@@ -87,10 +88,6 @@ var Engine = (function(global) {
         
         player.update();
 
-    }
-
-    function updateUI () {
-        updateScore();
     }
 
     /* 这个函数做了一些游戏的初始渲染，然后调用 renderEntities 函数。记住，这个函数
@@ -124,6 +121,7 @@ var Engine = (function(global) {
         }
 
         renderEntities();
+        updateUI();
     }
 
     /* 这个函数会在每个时间间隙被 render 函数调用。他的目的是分别调用你在 enemy 和 player

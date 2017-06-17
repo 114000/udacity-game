@@ -6,33 +6,51 @@ var allEnemies = [];
 var allObstacles = [];
 var player = new Player(score);
 
-function getRandomSpaceTime () {
-    return (Math.random() * (3 - 1) + 1) * 1000
-}
-
-/* function :
-* 这个函数会遍历 allEnemies 数组中的敌人，使其与人物进行碰撞检测 
-* 如果
-*/
-
+/**
+ * @function {} gameCheck: 游戏内部检测，目前只有碰撞检测
+ */
 function gameCheck () {
     checkCollisions();
-    checkSuccess();
 }
 
+/**
+ * @function {} checkCollisions: 这里通过检测的结果，处理玩家的显示信息
+ */
 function checkCollisions () {
     var collEnemy = player.checkCollision(allEnemies);
     if (collEnemy === null) return
-    player.reset(--score);
+
+    score = --score < 0 ? 0 : score;
+    player.reset(score);
 }
 
-function checkSuccess () {
-    if (player.gridY !== 0) return;
-    player.reset(++score);
+/**
+ * @function {bool} checkSuccess: 检查玩家是否得分，按下按键后，渲染前调用，否则会有残影出
+ * 现
+ * @param {string} 按键代表的方向，也是玩家将要移动的方向
+ */
+function checkSuccess (moveDirection) {
+    if (player.gridY === 1 && moveDirection === "up") {
+        player.reset(++score);
+        player.update();
+        return true;
+    }
+
+    return false;
 }
 
+/**
+ * @function {number} updateUI: 更新游戏的UI部分，分数和结束
+ */
+function updateUI () {
+    updateUIScore();
+    updateUIGameOver();
+}
 
-function updateScore () {
+/**
+ * @function {} updateUIScore: 此方法用来绘制出左上角的分数
+ */
+function updateUIScore () {
     var fontStyle = ctx.font;
     var fillStyle = ctx.fillStyle;
     var strokeStyle = ctx.strokeStyle;
@@ -41,16 +59,51 @@ function updateScore () {
     ctx.fillStyle = "white";
     ctx.strokeStyle = "black";
 
+    ctx.fillText(score, 10, 100);
     ctx.strokeText(score, 10, 100);
     
     ctx.font = fontStyle;
     ctx.fillStyle = fillStyle;
     ctx.strokeStyle = strokeStyle;
-    
 }
 
+/**
+ * @function {} updateUIGameOver: 此方法用来绘制游戏结束时的文字
+ */
+
+function updateUIGameOver () {
+    if (score < 20) return;
+    
+    var fontStyle = ctx.font;
+    var fillStyle = ctx.fillStyle;
+    var strokeStyle = ctx.strokeStyle;
+
+    ctx.font = "40px bold Verdana";
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black";
+
+    var text = "CONGRATULATION!"
+    ctx.fillText(text, 60, 300);
+    ctx.strokeText(text, 60, 300);
+    
+    ctx.font = fontStyle;
+    ctx.fillStyle = fillStyle;
+    ctx.strokeStyle = strokeStyle;
+}
+
+
+/**
+ * @function {number} getRandomSpaceTime: 获取生成敌人的间隔时间
+ */
+function getRandomSpaceTime () {
+    return (Math.random() * (3 - 1) + 1) * 1000 - score * 100
+}
+
+/**
+ * @function {} generateEnemy: 递归调用此方法可以持续生成敌人
+ */
 function generateEnemy () {
-    allEnemies.push(new Enemy());
+    allEnemies.push(new Enemy(score));
     setTimeout(generateEnemy, getRandomSpaceTime());
 }
 
@@ -68,7 +121,7 @@ document.addEventListener('keyup', function(e) {
         83: 'down',
         40: 'down'
     };
-
+    if (checkSuccess(allowedKeys[e.keyCode])) return;
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
