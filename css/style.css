@@ -1,3 +1,11 @@
 body {
     text-align: center;
 }
+
+.container {
+    width: 505px; height: 606px; position: relative; display: inline-block;
+}
+.container button {
+    width: 200px; height: 50px; font-size: 32px; display: none;
+    position: absolute; top: 60%; left: 50%; margin-left: -100px; z-index: 1;
+}

@@ -40,59 +40,6 @@ function checkSuccess (moveDirection) {
 }
 
 /**
- * @function {number} updateUI: 更新游戏的UI部分，分数和结束
- */
-function updateUI () {
-    updateUIScore();
-    updateUIGameOver();
-}
-
-/**
- * @function {} updateUIScore: 此方法用来绘制出左上角的分数
- */
-function updateUIScore () {
-    var fontStyle = ctx.font;
-    var fillStyle = ctx.fillStyle;
-    var strokeStyle = ctx.strokeStyle;
-
-    ctx.font = "30px Verdana";
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "black";
-
-    ctx.fillText(score, 10, 100);
-    ctx.strokeText(score, 10, 100);
-    
-    ctx.font = fontStyle;
-    ctx.fillStyle = fillStyle;
-    ctx.strokeStyle = strokeStyle;
-}
-
-/**
- * @function {} updateUIGameOver: 此方法用来绘制游戏结束时的文字
- */
-
-function updateUIGameOver () {
-    if (score < 20) return;
-    
-    var fontStyle = ctx.font;
-    var fillStyle = ctx.fillStyle;
-    var strokeStyle = ctx.strokeStyle;
-
-    ctx.font = "40px bold Verdana";
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "black";
-
-    var text = "CONGRATULATION!"
-    ctx.fillText(text, 60, 300);
-    ctx.strokeText(text, 60, 300);
-    
-    ctx.font = fontStyle;
-    ctx.fillStyle = fillStyle;
-    ctx.strokeStyle = strokeStyle;
-}
-
-
-/**
  * @function {number} getRandomSpaceTime: 获取生成敌人的间隔时间
  */
 function getRandomSpaceTime () {
@@ -111,6 +58,7 @@ function generateEnemy () {
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
 // 方法里面。你不需要再更改这段代码了。
 document.addEventListener('keyup', function(e) {
+    if (score >= 20) return;
     var allowedKeys = {
         65: 'left',
         37: 'left',

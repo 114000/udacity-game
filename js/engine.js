@@ -18,12 +18,16 @@ var Engine = (function(global) {
     var doc = global.document,
         win = global.window,
         canvas = doc.createElement('canvas'),
+        restartBtn = doc.querySelector('button'),
         ctx = canvas.getContext('2d'),
         lastTime;
 
     canvas.width = 505;
     canvas.height = 606;
-    doc.body.appendChild(canvas);
+    doc.querySelector('.container').appendChild(canvas);
+
+    restartBtn.addEventListener('click', init, false);
+
 
     /* 这个函数是整个游戏的主入口，负责适当的调用 update / render 函数 */
     function main() {
@@ -136,12 +140,70 @@ var Engine = (function(global) {
         player.render();
     }
 
-    /* 这个函数现在没干任何事，但是这会是一个好地方让你来处理游戏重置的逻辑。可能是一个
-     * 从新开始游戏的按钮，也可以是一个游戏结束的画面，或者其它类似的设计。它只会被 init()
-     * 函数调用一次。
+    /**
+     * @function {number} updateUI: 更新游戏的UI部分，分数和结束
+     */
+    function updateUI () {
+        updateUIScore();
+        updateUIGameOver();
+    }
+
+    /**
+     * @function {} updateUIScore: 此方法用来绘制出左上角的分数
+     */
+    function updateUIScore () {
+        var fontStyle = ctx.font;
+        var fillStyle = ctx.fillStyle;
+        var strokeStyle = ctx.strokeStyle;
+
+        ctx.font = "30px Verdana";
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "black";
+
+        ctx.fillText(score, 10, 100);
+        ctx.strokeText(score, 10, 100);
+        
+        ctx.font = fontStyle;
+        ctx.fillStyle = fillStyle;
+        ctx.strokeStyle = strokeStyle;
+    }
+
+    /**
+     * @function {} updateUIGameOver: 此方法用来绘制游戏结束时的文字
+     */
+
+    function updateUIGameOver () {
+        if (score < 20) return;
+        
+        var fontStyle = ctx.font;
+        var fillStyle = ctx.fillStyle;
+        var strokeStyle = ctx.strokeStyle;
+
+        ctx.font = "40px bold Verdana";
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "black";
+
+        var text = "CONGRATULATION!"
+        ctx.fillText(text, 60, 300);
+        ctx.strokeText(text, 60, 300);
+        
+        ctx.font = fontStyle;
+        ctx.fillStyle = fillStyle;
+        ctx.strokeStyle = strokeStyle;
+
+        restartBtn.style.display = "block";
+    }
+
+
+    /* 重置游戏数据，以便重新开始游戏
+     * 
      */
     function reset() {
-        // 空操作
+        restartBtn.style.display = "none";
+        score = 0;
+        allEnemies = [];
+        allObstacles = [];
+        player.reset(score);
     }
 
     /* 紧接着我们来加载我们知道的需要来绘制我们游戏关卡的图片。然后把 init 方法设置为回调函数。
